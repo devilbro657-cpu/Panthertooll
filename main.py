@@ -602,8 +602,12 @@ if __name__ == '__main__':
     print(f"{'='*50}")
     print(f"\nPress CTRL+C to stop\n")
     
-    app.run(
-        host=config.FLASK_HOST,
-        port=config.FLASK_PORT,
-        debug=config.FLASK_DEBUG
-    )
+    import os
+
+port = int(os.getenv('PORT', 5001))
+
+app.run(
+    host='0.0.0.0',
+    port=port,
+    debug=False
+)
