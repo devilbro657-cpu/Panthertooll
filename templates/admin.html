@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PANTHER - Admin Panel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: #f5f7ff;
+            min-height: 100vh;
+            color: #1a202c;
+            padding-bottom: 80px;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        
+        .header-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1a202c;
+            letter-spacing: -0.5px;
+        }
+        
+        .header-role {
+            background: #fef3c7;
+            color: #d97706;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-logout {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Records Tracker Card */
+        .tracker-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .tracker-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-label {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .date-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .date-input {
+            width: 100%;
+            padding: 10px 12px;
+            background: #374151;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .date-input:focus {
+            outline: none;
+        }
+        
+        .quick-btns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .quick-btn {
+            padding: 10px;
+            background: white;
+            border: 1.5px solid #dbeafe;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e40af;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quick-btn:hover {
+            background: #dbeafe;
+        }
+        
+        .quick-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+        
+        .search-row {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: #f1f5f9;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #1a202c;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+        
+        .search-btn {
+            width: 48px;
+            height: 48px;
+            background: #2563eb;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Download Button */
+        .btn-download {
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-download:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        
+        /* Table Card */
+        .table-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+        }
+        
+        .table-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .table-header span {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .table-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .table-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 12px;
+            align-items: center;
+        }
+        
+        .table-row:last-child {
+            border-bottom: none;
+        }
+        
+        .table-row .app-name {
+            font-weight: 600;
+            color: #1e40af;
+        }
+        
+        .table-row .username {
+            font-weight: 500;
+            color: #475569;
+        }
+        
+        .table-row .balance {
+            font-weight: 700;
+            color: #059669;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+        }
+        
+        .empty-state .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .error-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #dc2626;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .page-btn {
+            padding: 10px 20px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2563eb;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .page-info {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .page-info strong {
+            color: #1a202c;
+        }
+        
+        /* Admin Tab Styles */
+        .admin-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .admin-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 14px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #f1f5f9;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #1a202c;
+            transition: all 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .btn-create {
+            width: 100%;
+            padding: 13px;
+            background: #2563eb;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-create:hover {
+            background: #1d4ed8;
+        }
+        
+        .btn-save {
+            width: 100%;
+            padding: 13px;
+            background: #059669;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-save:hover {
+            background: #047857;
+        }
+        
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .alert-success {
+            background: #d1fae5;
+            color: #059669;
+            border: 1px solid #10b981;
+        }
+        
+        .alert-error {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #ef4444;
+        }
+        
+        .user-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #1a202c;
+            font-size: 14px;
+        }
+        
+        .user-role {
+            font-size: 11px;
+            color: #64748b;
+        }
+        
+        .badge {
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .badge-admin {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .badge-subuser {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 20px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #94a3b8;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+        
+        .nav-item.active {
+            color: #2563eb;
+        }
+        
+        .nav-icon {
+            font-size: 22px;
+        }
+        
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+        
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-user {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="header-logo"></div>
+            <div>
+                <div class="header-title">PANTHER</div>
+                <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                    <span class="header-role" id="user-role">ADMIN</span>
+                    <span class="header-user"> <span id="user-name">ADMIN</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- ==================== RECORDS TAB ==================== -->
+        <div class="tab-content active" id="tab-records">
+            <!-- Records Tracker -->
+            <div class="tracker-card">
+                <div class="tracker-title">📋 Records Tracker</div>
+                
+                <div class="section-label">📅 DATE RANGE</div>
+                <div class="date-row">
+                    <input type="date" class="date-input" id="date-from">
+                    <input type="date" class="date-input" id="date-to">
+                </div>
+                
+                <div class="quick-btns">
+                    <button class="quick-btn" onclick="setDateRange('today')">Today</button>
+                    <button class="quick-btn" onclick="setDateRange('7days')">7 Days</button>
+                    <button class="quick-btn active" onclick="setDateRange('all')">All</button>
+                </div>
+                
+                <div class="search-row">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search game / phone / username">
+                    <button class="search-btn" onclick="searchRecords()">🔍</button>
+                </div>
+            </div>
+            
+            <!-- Download Button -->
+            <button class="btn-download" onclick="downloadRecords()">
+                ⬇️ Download
+            </button>
+            
+            <!-- Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <span>APP</span>
+                    <span>USER</span>
+                    <span>BAL</span>
+                </div>
+                <div class="table-body" id="table-body">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <div>Loading records...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn" id="prev-btn" onclick="changePage(-1)">← Prev</button>
+                <div class="page-info">
+                    Page <strong id="current-page">1</strong> / <strong id="total-pages">1</strong> · Total: <strong id="total-records">0</strong>
+                </div>
+                <button class="page-btn" id="next-btn" onclick="changePage(1)">Next →</button>
+            </div>
+        </div>
+        
+        <!-- ==================== ADMIN TAB ==================== -->
+        <div class="tab-content" id="tab-admin">
+            <!-- Create User -->
+            <div class="admin-card">
+                <div class="admin-card-title">👤 Create Sub-User</div>
+                <div class="alert" id="user-alert"></div>
+                
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="new-username" placeholder="Enter username">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="new-password" placeholder="Enter password">
+                </div>
+                
+                <button class="btn-create" onclick="createUser()">➕ Create User</button>
+            </div>
+            
+            <!-- User List -->
+            <div class="admin-card">
+                <div class="admin-card-title">👥 All Users</div>
+                <div class="user-list" id="user-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <div>Loading users...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Config Settings -->
+            <div class="admin-card">
+                <div class="admin-card-title">⚙️ API Configuration</div>
+                <div class="alert" id="config-alert"></div>
+                
+                <div class="form-group">
+                    <label class="form-label">Base URL</label>
+                    <input type="text" class="form-input" id="config-base-url" placeholder="http://127.0.0.1:5000">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">API Key</label>
+                    <input type="text" class="form-input" id="config-api-key" placeholder="Enter API key">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">OTP Send Delay (seconds)</label>
+                    <input type="number" class="form-input" id="config-delay" placeholder="2" min="1" max="10">
+                </div>
+                
+                <button class="btn-save" onclick="saveConfig()">💾 Save Configuration</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="/" class="nav-item">
+            <span class="nav-icon">📱</span>
+            <span class="nav-label">Tool</span>
+        </a>
+        <button class="nav-item active" onclick="switchTab('records')" id="nav-records">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">Records</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('admin')" id="nav-admin">
+            <span class="nav-icon">🛡️</span>
+            <span class="nav-label">Admin</span>
+        </button>
+    </div>
+    
+    <script>
+        let currentPage = 1;
+        let recordsPerPage = 50;
+        let currentUser = null;
+        
+        // Initialize
+        window.onload = function() {
+            loadCurrentUser();
+            setDefaultDates();
+            loadRecords();
+            loadUsers();
+            loadConfig();
+        };
+        
+        // Tab Switching
+        function switchTab(tab) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('nav-' + tab).classList.add('active');
+            
+            // Load data
+            if (tab === 'records') loadRecords();
+            if (tab === 'admin') {
+                loadUsers();
+                loadConfig();
+            }
+        }
+        
+        // Check URL params for tab
+        const urlParams = new URLSearchParams(window.location.search);
+        const tabParam = urlParams.get('tab');
+        if (tabParam) {
+            switchTab(tabParam);
+        }
+        
+        function loadCurrentUser() {
+            fetch('/api/admin/current_user')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        currentUser = data.user;
+                        document.getElementById('user-name').textContent = data.user.username.toUpperCase();
+                        document.getElementById('user-role').textContent = data.user.role === 'admin' ? 'ADMIN' : 'SUB-ADMIN';
+                    }
+                })
+                .catch(err => console.error('Error loading user:', err));
+        }
+        
+        // ==================== RECORDS FUNCTIONS ====================
+        
+        function setDefaultDates() {
+            const today = new Date();
+            const weekAgo = new Date();
+            weekAgo.setDate(today.getDate() - 7);
+            
+            document.getElementById('date-from').value = formatDate(weekAgo);
+            document.getElementById('date-to').value = formatDate(today);
+        }
+        
+        function formatDate(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+        
+        function setDateRange(range) {
+            document.querySelectorAll('.quick-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const today = new Date();
+            let fromDate = new Date();
+            
+            if (range === 'today') {
+                fromDate = today;
+            } else if (range === '7days') {
+                fromDate.setDate(today.getDate() - 7);
+            } else if (range === 'all') {
+                fromDate = new Date('2020-01-01');
+            }
+            
+            document.getElementById('date-from').value = formatDate(fromDate);
+            document.getElementById('date-to').value = formatDate(today);
+            
+            currentPage = 1;
+            loadRecords();
+        }
+        
+        async function loadRecords() {
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading records...</div></div>';
+            
+            try {
+                const dateFrom = document.getElementById('date-from').value;
+                const dateTo = document.getElementById('date-to').value;
+                const search = document.getElementById('search-input').value;
+                
+                const response = await fetch(`/api/admin/records?from=${dateFrom}&to=${dateTo}&search=${encodeURIComponent(search)}&page=${currentPage}&per_page=${recordsPerPage}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const records = data.records || [];
+                    
+                    document.getElementById('total-records').textContent = data.total || 0;
+                    document.getElementById('total-pages').textContent = data.total_pages || 1;
+                    document.getElementById('current-page').textContent = currentPage;
+                    
+                    if (records.length === 0) {
+                        tableBody.innerHTML = '<div class="empty-state"><div class="icon">📭</div><div>No records found</div></div>';
+                    } else {
+                        tableBody.innerHTML = '';
+                        records.forEach(record => {
+                            const row = document.createElement('div');
+                            row.className = 'table-row';
+                            row.innerHTML = `
+                                <span class="app-name">${record.app_name || '-'}</span>
+                                <span class="username">${record.username || '-'}</span>
+                                <span class="balance">₹${record.account_balance || 0}</span>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    }
+                    
+                    updatePagination();
+                } else {
+                    tableBody.innerHTML = '<div class="error-state">❌ ' + (data.message || 'Failed to load') + '</div>';
+                }
+            } catch (error) {
+                tableBody.innerHTML = '<div class="error-state">❌ Network error</div>';
+                console.error('Error loading records:', error);
+            }
+        }
+        
+        function updatePagination() {
+            const totalPages = parseInt(document.getElementById('total-pages').textContent) || 1;
+            document.getElementById('prev-btn').disabled = currentPage <= 1;
+            document.getElementById('next-btn').disabled = currentPage >= totalPages;
+        }
+        
+        function changePage(direction) {
+            const totalPages = parseInt(document.getElementById('total-pages').textContent) || 1;
+            const newPage = currentPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                loadRecords();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        function searchRecords() {
+            currentPage = 1;
+            loadRecords();
+        }
+        
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') searchRecords();
+        });
+        
+        async function downloadRecords() {
+            try {
+                const dateFrom = document.getElementById('date-from').value;
+                const dateTo = document.getElementById('date-to').value;
+                const search = document.getElementById('search-input').value;
+                
+                const response = await fetch(`/api/admin/download_records?from=${dateFrom}&to=${dateTo}&search=${encodeURIComponent(search)}`);
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `panther_records_${dateFrom}_to_${dateTo}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    alert('Download failed');
+                }
+            } catch (error) {
+                alert('Download failed: ' + error.message);
+            }
+        }
+        
+        // ==================== ADMIN FUNCTIONS ====================
+        
+        async function loadUsers() {
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading users...</div></div>';
+            
+            try {
+                const response = await fetch('/api/admin/users');
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (data.users.length === 0) {
+                        userList.innerHTML = '<div class="empty-state"><div class="icon"></div><div>No users found</div></div>';
+                        return;
+                    }
+                    
+                    userList.innerHTML = '';
+                    data.users.forEach(user => {
+                        const item = document.createElement('div');
+                        item.className = 'user-item';
+                        item.innerHTML = `
+                            <div class="user-info">
+                                <span class="user-name">${user.username}</span>
+                                <span class="user-role">Created: ${user.created_at}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="badge badge-${user.role}">${user.role}</span>
+                                ${user.role !== 'admin' ? `<button class="btn-delete" onclick="deleteUser(${user.id})">Delete</button>` : ''}
+                            </div>
+                        `;
+                        userList.appendChild(item);
+                    });
+                }
+            } catch (error) {
+                userList.innerHTML = '<div class="error-state">❌ Failed to load users</div>';
+            }
+        }
+        
+        async function createUser() {
+            const username = document.getElementById('new-username').value.trim();
+            const password = document.getElementById('new-password').value.trim();
+            const alertDiv = document.getElementById('user-alert');
+            
+            if (!username || !password) {
+                alertDiv.textContent = '️ Please fill all fields';
+                alertDiv.className = 'alert alert-error';
+                alertDiv.style.display = 'block';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/admin/create_user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alertDiv.textContent = '✅ ' + data.message;
+                    alertDiv.className = 'alert alert-success';
+                    document.getElementById('new-username').value = '';
+                    document.getElementById('new-password').value = '';
+                    loadUsers();
+                } else {
+                    alertDiv.textContent = '❌ ' + data.message;
+                    alertDiv.className = 'alert alert-error';
+                }
+                
+                alertDiv.style.display = 'block';
+                setTimeout(() => { alertDiv.style.display = 'none'; }, 3000);
+            } catch (error) {
+                alertDiv.textContent = '❌ Failed to create user';
+                alertDiv.className = 'alert alert-error';
+                alertDiv.style.display = 'block';
+            }
+        }
+        
+        async function deleteUser(userId) {
+            if (!confirm('Are you sure you want to delete this user?')) return;
+            
+            try {
+                const response = await fetch('/api/admin/delete_user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    loadUsers();
+                } else {
+                    alert('Failed to delete user');
+                }
+            } catch (error) {
+                alert('Failed to delete user');
+            }
+        }
+        
+        async function loadConfig() {
+            try {
+                const response = await fetch('/api/admin/config');
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('config-base-url').value = data.config.base_url || '';
+                    document.getElementById('config-api-key').value = data.config.api_key || '';
+                    document.getElementById('config-delay').value = data.config.otp_delay || 2;
+                }
+            } catch (error) {
+                console.error('Error loading config:', error);
+            }
+        }
+        
+        async function saveConfig() {
+            const baseUrl = document.getElementById('config-base-url').value.trim();
+            const apiKey = document.getElementById('config-api-key').value.trim();
+            const delay = parseInt(document.getElementById('config-delay').value) || 2;
+            const alertDiv = document.getElementById('config-alert');
+            
+            if (!baseUrl || !apiKey) {
+                alertDiv.textContent = '️ Please fill all fields';
+                alertDiv.className = 'alert alert-error';
+                alertDiv.style.display = 'block';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/admin/save_config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ base_url: baseUrl, api_key: apiKey, otp_delay: delay })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alertDiv.textContent = '✅ Configuration saved successfully!';
+                    alertDiv.className = 'alert alert-success';
+                } else {
+                    alertDiv.textContent = '❌ ' + (data.message || 'Failed to save');
+                    alertDiv.className = 'alert alert-error';
+                }
+                
+                alertDiv.style.display = 'block';
+                setTimeout(() => { alertDiv.style.display = 'none'; }, 3000);
+            } catch (error) {
+                alertDiv.textContent = '❌ Failed to save configuration';
+                alertDiv.className = 'alert alert-error';
+                alertDiv.style.display = 'block';
+            }
+        }
+        
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+        
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/logout';
+            }
+        }
+    </script>
+</body>
+</html>
