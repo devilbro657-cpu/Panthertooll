@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: #f0f4f8;
+            min-height: 100vh;
+            color: #1a202c;
+            padding-bottom: 20px;
+        }
+        
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 0 12px;
+        }
+        
+        .header {
+            background: white;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .header-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a202c;
+            letter-spacing: -0.5px;
+        }
+        
+        .header-badge {
+            background: #fef3c7;
+            color: #d97706;
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .stats-row {
+            display: flex;
+            gap: 8px;
+            padding: 12px 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .stats-row::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .stat-pill {
+            background: white;
+            border: 1.5px solid #dbeafe;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1e40af;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .stat-pill strong {
+            color: #059669;
+            font-weight: 700;
+        }
+        
+        .tab-container {
+            background: #e2e8f0;
+            border-radius: 14px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+            margin-bottom: 16px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            border-radius: 11px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid #f1f5f9;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-label {
+            font-size: 10px;
+            color: #94a3b8;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .app-btn {
+            background: white;
+            border: 1.5px solid #dbeafe;
+            color: #1e40af;
+            padding: 10px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .app-btn:hover {
+            border-color: #3b82f6;
+        }
+        
+        .app-btn.selected {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            background: #f1f5f9;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            color: #1a202c;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 14px;
+            transition: all 0.2s;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: #2563eb;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status-bar {
+            background: white;
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid #f1f5f9;
+        }
+        
+        .status-bar .done { color: #059669; }
+        .status-bar .pending { color: #d97706; }
+        
+        .otp-box {
+            background: white;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1.5px solid #f1f5f9;
+        }
+        
+        .otp-box.failed-box {
+            border-color: #fecaca;
+            background: #fef2f2;
+        }
+        
+        .otp-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .otp-box-app {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .otp-box-status {
+            background: #fef3c7;
+            color: #d97706;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .otp-box-status.done {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        .otp-box-status.failed {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .phone-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .otp-input-dashed {
+            width: 100%;
+            padding: 14px;
+            background: #f1f5f9;
+            border: 1.5px dashed #cbd5e1;
+            border-radius: 12px;
+            color: #1a202c;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .otp-input-dashed:focus {
+            outline: none;
+            border-color: #3b82f6;
+            border-style: solid;
+            background: white;
+        }
+        
+        .otp-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-verify {
+            flex: 1;
+            background: #d1fae5;
+            color: #059669;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+        }
+        
+        .btn-resend {
+            flex: 1;
+            background: #fef3c7;
+            color: #d97706;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+        }
+        
+        .failed-message {
+            color: #dc2626;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 12px;
+            background: #fee2e2;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .success-message {
+            color: #059669;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 0;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .alert-success { background: #d1fae5; color: #059669; border: 1.5px solid #10b981; }
+        .alert-error { background: #fee2e2; color: #dc2626; border: 1.5px solid #ef4444; }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .mode-section {
+            display: none;
+        }
+        
+        .mode-section.active {
+            display: block;
+        }
+        
+        .multi-otp-section {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 14px;
+            border: 2px solid #3b82f6;
+            display: none;
+        }
+        
+        .multi-otp-section.show {
+            display: block;
+        }
+        
+        .multi-otp-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .multi-otp-hint {
+            font-size: 11px;
+            color: #1e40af;
+            margin-bottom: 12px;
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+        
+        .otp-apps-list {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 8px;
+        }
+        
+        .otp-app-item {
+            font-size: 12px;
+            color: #1e40af;
+            padding: 4px 0;
+            font-weight: 600;
+        }
+        
+        .multi-otp-input {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            color: #1a202c;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 6px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+        
+        .multi-otp-input:focus {
+            outline: none;
+            border-color: #059669;
+            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
+        }
+        
+        .btn-submit-multi {
+            width: 100%;
+            padding: 15px;
+            background: #059669;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-submit-multi:hover {
+            background: #047857;
+            transform: translateY(-1px);
+        }
+        
+        .notifications-container {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 90%;
+            max-width: 500px;
+            pointer-events: none;
+        }
+        
+        .notification {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease-out;
+            pointer-events: auto;
+        }
+        
+        .notification.sending {
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .notification.success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .notification.error {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .notification-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .notification-title {
+            font-weight: 700;
+            font-size: 13px;
+            color: #1a202c;
+            margin-bottom: 2px;
+        }
+        
+        .notification-message {
+            font-size: 11px;
+            color: #64748b;
+        }
+        
+        .notification-close {
+            background: #f1f5f9;
+            border: none;
+            color: #64748b;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-logo">🐆</div>
+        <div>
+            <div class="header-title">PANTHER</div>
+            <div class="header-badge">TOOL</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="stats-row" id="stats-row"></div>
+        
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="switchMode('multi')">
+                📱 Multi App
+            </button>
+            <button class="tab-btn" onclick="switchMode('single')">
+                🎯 Single App + Multi Number
+            </button>
+        </div>
+        
+        <div id="multi-app-mode" class="mode-section active">
+            <div class="card">
+                <div class="card-title"> Send OTP - Multiple Apps</div>
+                <div id="alert-multi" class="alert"></div>
+                
+                <div class="section-label">Select Apps</div>
+                <div class="app-grid" id="app-grid-multi">
+                    {% for app in apps %}
+                    <button class="app-btn" data-app="{{ app }}" onclick="toggleApp(this)">
+                        {{ app }}
+                    </button>
+                    {% endfor %}
+                </div>
+                
+                <div class="section-label">Phone Number</div>
+                <input type="tel" class="input-field" id="phone-multi" placeholder="10-digit mobile number" maxlength="10">
+                
+                <button class="btn-primary" onclick="sendMultiApp()">
+                    🚀 Send All OTPs
+                </button>
+            </div>
+        </div>
+        
+        <div id="single-app-mode" class="mode-section">
+            <div class="card">
+                <div class="card-title">🎯 Send OTP - Single App, Multiple Numbers</div>
+                <div id="alert-single" class="alert"></div>
+                
+                <div class="section-label">Select ONE App</div>
+                <div class="app-grid" id="app-grid-single">
+                    {% for app in apps %}
+                    <button class="app-btn" data-app="{{ app }}" onclick="selectSingleApp(this)">
+                        {{ app }}
+                    </button>
+                    {% endfor %}
+                </div>
+                
+                <div class="section-label">Multiple Phone Numbers (space or comma separated)</div>
+                <input type="text" class="input-field" id="phones-single" placeholder="e.g., 8250893769 8293317107" style="min-height: 80px;">
+                
+                <button class="btn-primary" onclick="sendSingleApp()">
+                    🚀 Send OTPs to All Numbers
+                </button>
+            </div>
+        </div>
+        
+        <div class="multi-otp-section" id="multi-otp-section">
+            <div class="multi-otp-title">⚡ Quick Submit All OTPs</div>
+            <div class="multi-otp-hint">
+                💡 Enter one OTP, it will try on all pending apps.<br>
+                Success হলে stop করবে, failed হলে পরের app এ যাবে।
+            </div>
+            
+            <div class="otp-apps-list" id="otp-apps-list"></div>
+            
+            <input type="text" class="multi-otp-input" id="multi-otp-input" 
+                   placeholder="Enter OTP" maxlength="4">
+            
+            <button class="btn-submit-multi" onclick="submitAllOTPs()">
+                ✅ Submit OTP
+            </button>
+        </div>
+        
+        <div class="status-bar">
+            <span class="done">✅ Done: <strong id="done-count">0</strong></span>
+            <span style="color: #cbd5e1;">|</span>
+            <span class="pending">⏳ Pending: <strong id="pending-count">0</strong></span>
+        </div>
+        
+        <div id="otp-section"></div>
+    </div>
+    
+    <div class="notifications-container" id="notifications-container"></div>
+    
+    <script>
+        let selectedApps = [];
+        let selectedSingleApp = null;
+        let tasks = {};
+        let taskOrder = [];
+        let appSuccessCount = {};
+        let currentMode = 'multi';
+        let notificationId = 0;
+        let activeNotifications = {};
+        
+        {% for app in apps %}
+        appSuccessCount['{{ app }}'] = 0;
+        {% endfor %}
+        
+        window.onload = function() {
+            renderTopStats();
+        };
+        
+        function showNotification(title, message, type = 'info', duration = 3000) {
+            const container = document.getElementById('notifications-container');
+            const id = notificationId++;
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.id = `notification-${id}`;
+            
+            let icon = '📱';
+            if (type === 'sending') icon = '⏳';
+            else if (type === 'success') icon = '✅';
+            else if (type === 'error') icon = '❌';
+            
+            notification.innerHTML = `
+                <span class="notification-icon">${icon}</span>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close" onclick="closeNotification(${id})">×</button>
+            `;
+            
+            container.appendChild(notification);
+            activeNotifications[id] = notification;
+            
+            if (duration > 0) {
+                setTimeout(() => closeNotification(id), duration);
+            }
+        }
+        
+        function closeNotification(id) {
+            const notification = activeNotifications[id];
+            if (notification) {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) notification.parentNode.removeChild(notification);
+                    delete activeNotifications[id];
+                }, 300);
+            }
+        }
+        
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('multi-app-mode').classList.remove('active');
+            document.getElementById('single-app-mode').classList.remove('active');
+            
+            if (mode === 'multi') {
+                document.getElementById('multi-app-mode').classList.add('active');
+            } else {
+                document.getElementById('single-app-mode').classList.add('active');
+            }
+        }
+        
+        function toggleApp(btn) {
+            const app = btn.getAttribute('data-app');
+            btn.classList.toggle('selected');
+            
+            if (selectedApps.includes(app)) {
+                selectedApps = selectedApps.filter(a => a !== app);
+            } else {
+                selectedApps.push(app);
+            }
+        }
+        
+        function selectSingleApp(btn) {
+            document.querySelectorAll('#app-grid-single .app-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedSingleApp = btn.getAttribute('data-app');
+        }
+        
+        async function sendMultiApp() {
+            const phone = document.getElementById('phone-multi').value;
+            
+            if (!phone || phone.length !== 10) {
+                showAlert('multi', 'Please enter valid 10-digit number', 'error');
+                return;
+            }
+            
+            if (selectedApps.length === 0) {
+                showAlert('multi', 'Please select at least one app', 'error');
+                return;
+            }
+            
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span> Sending...';
+            
+            showNotification('Starting...', `Sending OTPs to ${selectedApps.length} apps`, 'sending', 2500);
+            
+            taskOrder = [];
+            
+            for (let i = 0; i < selectedApps.length; i++) {
+                const appName = selectedApps[i];
+                
+                showNotification('Sending OTP', `${appName} (${i + 1}/${selectedApps.length})`, 'sending', 2000);
+                
+                try {
+                    const response = await fetch('/api/send_otp', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone: phone, app_name: appName })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        tasks[data.task_id] = {
+                            app_name: appName,
+                            phone: phone,
+                            status: 'pending',
+                            otp: null
+                        };
+                        taskOrder.push(data.task_id);
+                        
+                        showNotification('OTP Sent', `${appName} ✓`, 'success', 2500);
+                    } else {
+                        showNotification('Failed', `${appName} ✗`, 'error', 3000);
+                    }
+                } catch (error) {
+                    showNotification('Error', error.message, 'error', 3000);
+                }
+                
+                if (i < selectedApps.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                }
+            }
+            
+            setTimeout(() => {
+                renderOTPBoxes();
+                renderMultiOTPSubmit();
+                updateStats();
+                document.getElementById('otp-section').scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+            
+            btn.disabled = false;
+            btn.innerHTML = '🚀 Send All OTPs';
+        }
+        
+        async function sendSingleApp() {
+            const phonesInput = document.getElementById('phones-single').value;
+            
+            if (!phonesInput.trim()) {
+                showAlert('single', 'Please enter at least one phone number', 'error');
+                return;
+            }
+            
+            const phones = phonesInput.split(/[\s,]+/).filter(n => n.length === 10);
+            
+            if (phones.length === 0) {
+                showAlert('single', 'Please enter valid 10-digit numbers', 'error');
+                return;
+            }
+            
+            if (!selectedSingleApp) {
+                showAlert('single', 'Please select ONE app', 'error');
+                return;
+            }
+            
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span> Sending...';
+            
+            showNotification('Starting...', `Sending OTPs to ${phones.length} numbers`, 'sending', 2500);
+            
+            taskOrder = [];
+            
+            for (let i = 0; i < phones.length; i++) {
+                const phone = phones[i];
+                
+                showNotification('Sending OTP', `${selectedSingleApp} → ${phone} (${i + 1}/${phones.length})`, 'sending', 2000);
+                
+                try {
+                    const response = await fetch('/api/send_otp', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone: phone, app_name: selectedSingleApp })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        tasks[data.task_id] = {
+                            app_name: selectedSingleApp,
+                            phone: phone,
+                            status: 'pending',
+                            otp: null
+                        };
+                        taskOrder.push(data.task_id);
+                        
+                        showNotification('OTP Sent', `${selectedSingleApp} → ${phone} ✓`, 'success', 2500);
+                    } else {
+                        showNotification('Failed', `${selectedSingleApp} → ${phone} ✗`, 'error', 3000);
+                    }
+                } catch (error) {
+                    showNotification('Error', error.message, 'error', 3000);
+                }
+                
+                if (i < phones.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                }
+            }
+            
+            setTimeout(() => {
+                renderOTPBoxes();
+                renderMultiOTPSubmit();
+                updateStats();
+                document.getElementById('otp-section').scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+            
+            btn.disabled = false;
+            btn.innerHTML = '🚀 Send OTPs to All Numbers';
+        }
+        
+        function renderMultiOTPSubmit() {
+            const section = document.getElementById('multi-otp-section');
+            const appsList = document.getElementById('otp-apps-list');
+            const otpInput = document.getElementById('multi-otp-input');
+            
+            const pendingTasks = taskOrder.filter(id => tasks[id] && tasks[id].status === 'pending');
+            
+            if (pendingTasks.length === 0) {
+                section.classList.remove('show');
+                return;
+            }
+            
+            appsList.innerHTML = '';
+            
+            pendingTasks.forEach((taskId, index) => {
+                const task = tasks[taskId];
+                if (!task) return;
+                
+                const appItem = document.createElement('div');
+                appItem.className = 'otp-app-item';
+                appItem.textContent = `${index + 1}. ${task.app_name}`;
+                appsList.appendChild(appItem);
+            });
+            
+            otpInput.value = '';
+            section.classList.add('show');
+        }
+        
+        async function submitAllOTPs() {
+            const otpInput = document.getElementById('multi-otp-input');
+            const otp = otpInput.value.trim();
+            
+            if (!otp || otp.length !== 4) {
+                showNotification('Error', 'Please enter a valid 4-digit OTP', 'error', 3000);
+                return;
+            }
+            
+            const pendingTasks = taskOrder.filter(id => tasks[id] && tasks[id].status === 'pending');
+            
+            if (pendingTasks.length === 0) {
+                showNotification('Done', 'All tasks already completed!', 'success', 3000);
+                document.getElementById('multi-otp-section').classList.remove('show');
+                return;
+            }
+            
+            showNotification('Trying OTP', `Trying ${otp} on pending apps...`, 'sending', 2000);
+            
+            let verified = false;
+            
+            for (let i = 0; i < pendingTasks.length; i++) {
+                const taskId = pendingTasks[i];
+                
+                try {
+                    const response = await fetch('/api/verify_otp', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ task_id: taskId, otp: otp })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        tasks[taskId].status = 'done';
+                        tasks[taskId].otp = otp;
+                        
+                        const appName = tasks[taskId].app_name;
+                        appSuccessCount[appName]++;
+                        verified = true;
+                        
+                        showNotification('Success', `${appName} ✓ ${otp}`, 'success', 3000);
+                        
+                        break;
+                    } else {
+                        showNotification('Failed', `${tasks[taskId].app_name} - trying next...`, 'error', 1500);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+                
+                if (i < pendingTasks.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
+            }
+            
+            renderTopStats();
+            renderOTPBoxes();
+            updateStats();
+            
+            otpInput.value = '';
+            
+            const remainingPending = taskOrder.filter(id => tasks[id] && tasks[id].status === 'pending').length;
+            
+            if (remainingPending > 0) {
+                if (verified) {
+                    showNotification('Next OTP', `${remainingPending} apps still pending. Enter next OTP.`, 'sending', 3000);
+                } else {
+                    showNotification('Failed', `${otp} didn't work on any app. Try again.`, 'error', 3000);
+                }
+                setTimeout(() => otpInput.focus(), 500);
+            } else {
+                showNotification('All Done!', `✅ All apps verified successfully!`, 'success', 4000);
+                setTimeout(() => {
+                    document.getElementById('multi-otp-section').classList.remove('show');
+                }, 2000);
+            }
+        }
+        
+        function renderOTPBoxes() {
+            const container = document.getElementById('otp-section');
+            container.innerHTML = '';
+            
+            taskOrder.forEach(taskId => {
+                const task = tasks[taskId];
+                if (!task) return;
+                
+                const box = document.createElement('div');
+                box.className = 'otp-box';
+                
+                let statusText = '⏳ Pending';
+                let statusClass = '';
+                
+                if (task.status === 'done') {
+                    statusText = '✅ Done';
+                    statusClass = 'done';
+                } else if (task.status === 'failed') {
+                    statusText = '❌ Failed';
+                    statusClass = 'failed';
+                    box.classList.add('failed-box');
+                }
+                
+                let content = `
+                    <div class="otp-box-header">
+                        <span class="otp-box-app">${task.app_name}</span>
+                        <span class="otp-box-status ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="phone-label">📱 ${task.phone}</div>
+                `;
+                
+                if (task.status === 'pending') {
+                    content += `
+                        <input type="text" class="otp-input-dashed" id="otp-${taskId}" 
+                               placeholder="— — — —" maxlength="4" 
+                               onkeypress="if(event.key==='Enter')verifyOTP('${taskId}')">
+                        <div class="otp-actions">
+                            <button class="btn-verify" onclick="verifyOTP('${taskId}')">✓ Verify</button>
+                            <button class="btn-resend" onclick="resendOTP('${taskId}')">🔄 Resend</button>
+                        </div>
+                    `;
+                } else if (task.status === 'done') {
+                    content += `
+                        <div class="success-message">
+                            ✅ Verified! OTP: <strong>${task.otp}</strong>
+                        </div>
+                    `;
+                } else {
+                    content += `
+                        <div class="failed-message">
+                            ❌ Wrong OTP! Tried: <strong>${task.otp || 'N/A'}</strong>
+                        </div>
+                        <input type="text" class="otp-input-dashed" id="otp-${taskId}" 
+                               placeholder="— — — —" maxlength="4" 
+                               onkeypress="if(event.key==='Enter')verifyOTP('${taskId}')">
+                        <div class="otp-actions">
+                            <button class="btn-verify" onclick="verifyOTP('${taskId}')">✓ Retry</button>
+                            <button class="btn-resend" onclick="resendOTP('${taskId}')">🔄 Resend</button>
+                        </div>
+                    `;
+                }
+                
+                box.innerHTML = content;
+                container.appendChild(box);
+            });
+        }
+        
+        async function verifyOTP(taskId) {
+            const otpInput = document.getElementById(`otp-${taskId}`);
+            const otp = otpInput ? otpInput.value.trim() : '';
+            
+            if (!otp || otp.length !== 4) {
+                showAlert(currentMode, 'Please enter 4-digit OTP', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/verify_otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ task_id: taskId, otp: otp })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    tasks[taskId].status = 'done';
+                    tasks[taskId].otp = otp;
+                    
+                    const appName = tasks[taskId].app_name;
+                    appSuccessCount[appName]++;
+                    
+                    showNotification('Success', `${appName} ✓ ${otp}`, 'success', 3000);
+                    renderTopStats();
+                    renderOTPBoxes();
+                    updateStats();
+                    renderMultiOTPSubmit();
+                } else {
+                    tasks[taskId].status = 'failed';
+                    tasks[taskId].otp = otp;
+                    showNotification('Failed', `${tasks[taskId].app_name} - Wrong OTP`, 'error', 3000);
+                    renderOTPBoxes();
+                }
+            } catch (error) {
+                showAlert(currentMode, 'Error: ' + error.message, 'error');
+            }
+        }
+        
+        async function resendOTP(taskId) {
+            const task = tasks[taskId];
+            if (!task) return;
+            
+            showNotification('Sending...', `Resending OTP to ${task.app_name}`, 'sending', 2500);
+            
+            try {
+                const response = await fetch('/api/send_otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: task.phone, app_name: task.app_name })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    tasks[taskId].status = 'pending';
+                    tasks[taskId].otp = null;
+                    showNotification('Resent', `${task.app_name} OTP resent`, 'success', 3000);
+                    renderOTPBoxes();
+                    renderMultiOTPSubmit();
+                } else {
+                    showNotification('Failed', 'Resend failed', 'error', 3000);
+                }
+            } catch (error) {
+                showNotification('Error', error.message, 'error', 3000);
+            }
+        }
+        
+        function updateStats() {
+            const done = taskOrder.filter(id => tasks[id] && tasks[id].status === 'done').length;
+            const pending = taskOrder.filter(id => tasks[id] && tasks[id].status === 'pending').length;
+            
+            document.getElementById('done-count').textContent = done;
+            document.getElementById('pending-count').textContent = pending;
+        }
+        
+        function renderTopStats() {
+            const statsRow = document.getElementById('stats-row');
+            statsRow.innerHTML = '';
+            
+            Object.keys(appSuccessCount).forEach(appName => {
+                const count = appSuccessCount[appName];
+                const shortName = appName.replace('_game', '').replace('_', '');
+                const pill = document.createElement('div');
+                pill.className = 'stat-pill';
+                pill.innerHTML = `${shortName}: <strong>${count}</strong>`;
+                statsRow.appendChild(pill);
+            });
+        }
+        
+        function showAlert(mode, message, type) {
+            const alertBox = document.getElementById(mode === 'multi' ? 'alert-multi' : 'alert-single');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.style.display = 'block';
+            setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
+        }
+    </script>
+</body>
+</html>
